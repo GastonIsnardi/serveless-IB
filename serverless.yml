@@ -1,0 +1,23 @@
+service: my-serverless-service-test-logs
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'develop'}
+  region: us-east-2
+  logRetentionInDays: ${self:custom.logRetentionInDays.${self:provider.stage}}
+
+custom:
+  functionName: helloFunction # Definimos una variable personalizada llamada "functionName"
+  logRetentionInDays:
+    production: !Ref 'AWS::NoValue'
+    develop: ${ssm:develop/env/variables}.logRetention
+    uat: 5
+
+functions:
+  api:
+    handler: index.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
