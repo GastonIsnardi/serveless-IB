@@ -4,14 +4,14 @@ provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'develop'}
-  region: us-east-2
+  region: us-east-1
   logRetentionInDays: ${self:custom.logRetentionInDays.${self:provider.stage}}
 
 custom:
   functionName: helloFunction # Definimos una variable personalizada llamada "functionName"
   logRetentionInDays:
     production: !Ref 'AWS::NoValue'
-    develop: ${ssm:develop/env/variables}.logRetention
+    develop: ${ssm:/develop2}
     uat: 5
 
 functions:
